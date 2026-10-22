@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monkeyphones Helmond — Voorraadbeheer</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="scrim" id="scrim"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><i class="brand-mark">M</i><span>MONKEYPHONES</span></div>
+    <div class="nav-title">MENU</div>
+    <nav>
+      <button class="nav-btn active" data-page="dashboard">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-btn" data-page="inventory">
+        <svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg>
+        <span>Voorraad</span>
+      </button>
+      <button class="nav-btn" data-page="iphone">
+        <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>
+        <span>iPhone</span>
+      </button>
+      <button class="nav-btn" data-page="samsung">
+        <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2.5"/><circle cx="12" cy="5.5" r=".6"/><path d="M10.5 19h3"/></svg>
+        <span>Samsung</span>
+      </button>
+      <button class="nav-btn" data-page="batterij">
+        <svg viewBox="0 0 24 24"><rect x="2" y="8" width="17" height="9" rx="2"/><path d="M22 11v3"/><path d="M6 11v3"/></svg>
+        <span>Batterij</span>
+      </button>
+      <button class="nav-btn" data-page="achterkant">
+        <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><circle cx="10" cy="6.5" r="1.4"/></svg>
+        <span>Achterkant</span>
+      </button>
+      <button class="nav-btn" data-page="reparaties">
+        <svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5L21 12.6a1 1 0 0 1 0 1.4l-6.9 6.9a1 1 0 0 1-1.4 0L3.1 11.3a1 1 0 0 1 0-1.4L10 3a1 1 0 0 1 1.4 0z" transform="scale(.85) translate(2 2)"/></svg>
+        <span>Reparaties</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="backup">
+        <button class="ghost small" id="exportBtn" title="Download al je gegevens als bestand">⬇ Back-up</button>
+        <button class="ghost small" id="importBtn" title="Gegevens terugzetten uit een back-up">⬆ Herstel</button>
+        <input type="file" id="importFile" accept="application/json" hidden>
+      </div>
+      <div class="store-mini">
+        <i class="brand-mark sm">M</i>
+        <div><strong>Monkeyphones</strong><small>Helmond · Voorraadbeheer</small></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu" id="mobileMenu" aria-label="Menu openen">☰</button>
+        <div>
+          <span class="eyebrow">MONKEYPHONES MANAGEMENT</span>
+          <h1 id="pageTitle">Dashboard</h1>
+        </div>
+      </div>
+      <button class="primary" id="quickAdd">＋ Nieuw onderdeel</button>
+    </header>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active">
+      <div class="hero">
+        <div>
+          <span class="hero-label">VOORRAAD OVERZICHT</span>
+          <h2>Alles onder controle.</h2>
+          <p>Beheer je telefoononderdelen en reparaties snel en overzichtelijk vanuit één plek.</p>
+        </div>
+        <div class="hero-art" aria-hidden="true"><i></i><i></i><i></i></div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><span class="stat-icon green"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/></svg></span><div><small>Totaal onderdelen</small><strong id="statItems">0</strong></div></div>
+        <div class="stat"><span class="stat-icon gold">€</span><div><small>Voorraadwaarde (verkoop)</small><strong id="statValue">€ 0,00</strong></div></div>
+        <div class="stat"><span class="stat-icon dark"><svg class="apple-svg" viewBox="0 0 24 24"><use href="#apple-path"/></svg></span><div><small>Apple voorraad</small><strong id="statApple">0</strong></div></div>
+        <div class="stat"><span class="stat-icon blue">S</span><div><small>Samsung voorraad</small><strong id="statSamsung">0</strong></div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div><h3>Recent toegevoegd</h3><p>De laatste 6 onderdelen</p></div><button class="ghost" data-go="inventory">Alles bekijken →</button></div>
+          <div id="recentList" class="recent-list"></div>
+        </div>
+        <div class="stack">
+          <div class="panel">
+            <div class="panel-head"><div><h3>Verdeling</h3><p>Onderdelen per merk</p></div></div>
+            <div class="distribution">
+              <div class="dist-row"><div><span class="dot apple"></span>Apple</div><strong id="applePercent">0%</strong></div>
+              <div class="bar"><i id="appleBar"></i></div>
+              <div class="dist-row"><div><span class="dot samsung"></span>Samsung</div><strong id="samsungPercent">0%</strong></div>
+              <div class="bar"><i id="samsungBar" class="alt"></i></div>
+            </div>
+            <div class="category-mini" id="categoryMini"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><h3>Bijna op</h3><p>Onderdelen met 2 of minder op voorraad</p></div></div>
+            <div id="lowList" class="recent-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VOORRAAD -->
+    <section id="inventory" class="page">
+      <div class="section-tools">
+        <div class="search-wrap"><span>⌕</span><input id="search" placeholder="Zoek model of onderdeel..."></div>
+        <select id="brandFilter"><option value="">Alle merken</option><option>Apple</option><option>Samsung</option></select>
+        <select id="categoryFilter"><option value="">Alle onderdelen</option></select>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Voorraad</h3><p id="inventoryCount">0 onderdelen</p></div><button class="primary small" id="addInventory">＋ Toevoegen</button></div>
+        <div class="table-scroll">
+          <table>
+            <thead><tr><th>Merk</th><th>Onderdeel</th><th>Model</th><th>Aantal</th><th>Prijs p/st</th><th>Waarde</th><th></th></tr></thead>
+            <tbody id="inventoryBody"></tbody>
+          </table>
+        </div>
+        <div id="emptyState" class="empty">Geen onderdelen gevonden.<br><button class="primary small" id="emptyAdd">＋ Onderdeel toevoegen</button></div>
+      </div>
+    </section>
+
+    <!-- iPHONE -->
+    <section id="iphone" class="page">
+      <div class="brand-banner">
+        <div><span class="banner-label">APPLE</span><h2>iPhone onderdelen</h2><p>Bekijk je Apple voorraad per categorie. Klik op een categorie om te filteren.</p></div>
+        <svg class="big-logo" viewBox="0 0 24 24"><use href="#apple-path"/></svg>
+      </div>
+      <div class="category-grid" id="iphoneCategories"></div>
+      <div class="panel"><div class="panel-head"><div><h3>iPhone voorraad</h3><p>Alle Apple onderdelen</p></div></div><div id="iphoneList"></div></div>
+    </section>
+
+    <!-- SAMSUNG -->
+    <section id="samsung" class="page">
+      <div class="brand-banner">
+        <div><span class="banner-label">SAMSUNG</span><h2>Samsung onderdelen</h2><p>Bekijk je Samsung voorraad per categorie. Klik op een categorie om te filteren.</p></div>
+        <div class="big-word">SAMSUNG</div>
+      </div>
+      <div class="category-grid" id="samsungCategories"></div>
+      <div class="panel"><div class="panel-head"><div><h3>Samsung voorraad</h3><p>Alle Samsung onderdelen</p></div></div><div id="samsungList"></div></div>
+    </section>
+
+    <!-- BATTERIJ -->
+    <section id="batterij" class="page">
+      <div class="brand-banner">
+        <div><span class="banner-label">ONDERDEEL</span><h2>Batterij</h2><p>Alle batterijs van Apple en Samsung op één plek.</p></div>
+        <div class="big-emoji">🔋</div>
+      </div>
+      <div class="stats three">
+        <div class="stat"><span class="stat-icon green">#</span><div><small>Totaal stuks</small><strong id="batterijQty">0</strong></div></div>
+        <div class="stat"><span class="stat-icon dark"><svg class="apple-svg" viewBox="0 0 24 24"><use href="#apple-path"/></svg></span><div><small>Apple</small><strong id="batterijApple">0</strong></div></div>
+        <div class="stat"><span class="stat-icon blue">S</span><div><small>Samsung</small><strong id="batterijSamsung">0</strong></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Batterij voorraad</h3><p id="batterijCount">0 modellen</p></div><button class="primary small" data-add-cat="Batterij">＋ Toevoegen</button></div>
+        <div class="table-scroll"><table><thead><tr><th>Merk</th><th>Model</th><th>Aantal</th><th>Prijs p/st</th><th>Waarde</th><th></th></tr></thead><tbody id="batterijBody"></tbody></table></div>
+        <div id="batterijEmpty" class="empty">Nog geen batterijs toegevoegd.<br><button class="primary small" data-add-cat="Batterij">＋ Eerste toevoegen</button></div>
+      </div>
+    </section>
+
+    <!-- ACHTERKANT -->
+    <section id="achterkant" class="page">
+      <div class="brand-banner">
+        <div><span class="banner-label">ONDERDEEL</span><h2>Achterkant</h2><p>Alle achterkants van Apple en Samsung op één plek.</p></div>
+        <div class="big-emoji">🔲</div>
+      </div>
+      <div class="stats three">
+        <div class="stat"><span class="stat-icon green">#</span><div><small>Totaal stuks</small><strong id="achterkantQty">0</strong></div></div>
+        <div class="stat"><span class="stat-icon dark"><svg class="apple-svg" viewBox="0 0 24 24"><use href="#apple-path"/></svg></span><div><small>Apple</small><strong id="achterkantApple">0</strong></div></div>
+        <div class="stat"><span class="stat-icon blue">S</span><div><small>Samsung</small><strong id="achterkantSamsung">0</strong></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><h3>Achterkant voorraad</h3><p id="achterkantCount">0 modellen</p></div><button class="primary small" data-add-cat="Achterkant">＋ Toevoegen</button></div>
+        <div class="table-scroll"><table><thead><tr><th>Merk</th><th>Model</th><th>Aantal</th><th>Prijs p/st</th><th>Waarde</th><th></th></tr></thead><tbody id="achterkantBody"></tbody></table></div>
+        <div id="achterkantEmpty" class="empty">Nog geen achterkants toegevoegd.<br><button class="primary small" data-add-cat="Achterkant">＋ Eerste toevoegen</button></div>
+      </div>
+    </section>
+
+    <!-- REPARATIES -->
+    <section id="reparaties" class="page">
+      <div class="stats three">
+        <div class="stat"><span class="stat-icon green">€</span><div><small>Omzet vandaag</small><strong id="repairToday">€ 0,00</strong></div></div>
+        <div class="stat"><span class="stat-icon blue"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span><div><small>Totaal reparaties</small><strong id="repairCount">0</strong></div></div>
+        <div class="stat"><span class="stat-icon gold">€</span><div><small>Totale omzet reparaties</small><strong id="repairRevenue">€ 0,00</strong></div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div><h3>Reparatielijst</h3><p>Nieuwste reparaties bovenaan</p></div>
+          <div class="search-wrap compact"><span>⌕</span><input id="repairSearch" type="search" placeholder="Zoek klant, telefoon of reparatie..."></div>
+        </div>
+        <div class="table-scroll">
+          <table class="wide">
+            <thead><tr><th>Datum</th><th>Klant</th><th>Telefoonnr.</th><th>Toestel</th><th>Reparatie</th><th>Prijs</th><th></th></tr></thead>
+            <tbody id="repairTableBody"></tbody>
+          </table>
+        </div>
+        <div id="repairEmpty" class="empty">Nog geen reparaties toegevoegd.<br><button class="primary small" id="repairEmptyAdd">＋ Eerste reparatie toevoegen</button></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- MODAL VOORRAAD -->
+  <div class="modal-backdrop" id="modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head"><div><span class="eyebrow">VOORRAAD</span><h2 id="modalTitle">Onderdeel toevoegen</h2></div><button class="close" id="closeModal" aria-label="Sluiten">×</button></div>
+      <form id="stockForm">
+        <input type="hidden" id="editId">
+        <div class="form-grid">
+          <label>Merk<select id="brand" required><option value="Apple">Apple</option><option value="Samsung">Samsung</option></select></label>
+          <label>Onderdeel<select id="category" required></select></label>
+          <label class="full">Model<input id="model" placeholder="Bijv. iPhone 13 Pro Max" required></label>
+          <label>Aantal<input id="quantity" type="number" min="0" step="1" value="1" required></label>
+          <label>Verkoopprijs per stuk (€)<input id="sell" type="number" min="0" step="0.01" placeholder="0,00" required></label>
+        </div>
+        <div class="modal-actions"><button type="button" class="ghost" id="cancelModal">Annuleren</button><button class="primary" type="submit">Opslaan</button></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL REPARATIE -->
+  <div class="modal-backdrop" id="repairModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="repairModalTitle">
+      <div class="modal-head"><div><span class="eyebrow">REPARATIE</span><h2 id="repairModalTitle">Reparatie toevoegen</h2></div><button class="close" id="closeRepairModal" aria-label="Sluiten">×</button></div>
+      <form id="repairForm">
+        <input type="hidden" id="repairId">
+        <div class="form-grid">
+          <label>Datum<input type="date" id="repairDate" required></label>
+          <label>Naam klant<input type="text" id="repairCustomer" placeholder="Bijv. Jan de Vries" required></label>
+          <label>Telefoonnummer klant<input type="tel" id="repairPhone" placeholder="06 12345678" required></label>
+          <label>Toestel<input type="text" id="repairDevice" placeholder="Bijv. iPhone 13" required></label>
+          <label>Reparatie<input type="text" id="repairType" placeholder="Bijv. Scherm vervangen" required></label>
+          <label>Prijs reparatie (€)<input type="number" id="repairPrice" min="0" step="0.01" placeholder="0,00" required></label>
+        </div>
+        <div class="modal-actions"><button type="button" class="ghost" id="cancelRepair">Annuleren</button><button class="primary" type="submit">Opslaan</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Apple-logo, eenmalig gedefinieerd en overal hergebruikt -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><path id="apple-path" d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></defs></svg>
+
+  <script src="script.js"></script>
+</body>
+</html>
